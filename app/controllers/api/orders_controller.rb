@@ -34,7 +34,7 @@ class Api::OrdersController < ApplicationController
   def update
   	respond_to do |format|
 	  	if @order.update(order_params)
-	  		format.json { render :show, status: :ok, location: @order }
+	  		format.json { render json: @order, status: :ok }
 	  	else
 	  		format.json { render json: @order.errors, status: :unprocessable_entity }
 	  	end
@@ -51,7 +51,7 @@ class Api::OrdersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
-      @order = MenuItem.find(params[:id])
+      @order = Order.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,0 +1,1 @@
+json.extract! @order, :id, :note, :created_at, :updated_at

@@ -25,9 +25,19 @@ class Api::MenuItemsController < ApplicationController
 
   def create
   	@menu_item = MenuItem.new(menu_item_params)
-
+    
   	respond_to do |format|
 	  	if @menu_item.save
+        if(category_params[:category])
+          c = Category.where(:name => category_params[:category][:name]).take
+          if c
+            @menu_item.categories << c
+          else
+            @category = Category.new(category_params[:category])
+            @menu_item.categories << @category
+          end
+          
+        end
 	  		format.json { render json: @menu_item, status: :ok}
 	  	else
 	  		format.json { render json: @menu_item.errors, status: :unprocessable_entity }
@@ -38,7 +48,7 @@ class Api::MenuItemsController < ApplicationController
   def update
   	respond_to do |format|
 	  	if @menu_item.update(menu_item_params)
-	  		format.json { render :show, status: :ok, location: @menu_item }
+	  		format.json { render json: @menu_item, status: :ok }
 	  	else
 	  		format.json { render json: @menu_item.errors, status: :unprocessable_entity }
 	  	end
@@ -64,7 +74,10 @@ class Api::MenuItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def menu_item_params
-      params.require(:menu_item).permit(:item_name, :item_cost, :desc, :ingredient_list, item_order_attributes: [:note, :quantity, :id])
+      params.require(:menu_item).permit(:item_name, :item_cost, :desc, :ingredient_list)
     end
 
+    def category_params
+      params.permit(category: [:name, :desc])
+    end
 end
