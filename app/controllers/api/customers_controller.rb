@@ -7,6 +7,11 @@ class Api::CustomersController < ApplicationController
     render json: @customers, status: :ok
   end
 
+  def reservations
+    @reservations = Reservation.where(:customer_id => params[:id])
+    render json: @reservations, status: :ok
+  end
+
   def show
     render json: @customer, status: :ok
   end

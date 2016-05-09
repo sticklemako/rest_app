@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160507105834) do
+ActiveRecord::Schema.define(version: 20160508115859) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,19 @@ ActiveRecord::Schema.define(version: 20160507105834) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "reservations", force: :cascade do |t|
+    t.integer  "customer_id"
+    t.datetime "time_start"
+    t.datetime "time_end"
+    t.integer  "no_ppl"
+    t.string   "type"
+    t.text     "note"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "reservations", ["customer_id"], name: "index_reservations_on_customer_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
